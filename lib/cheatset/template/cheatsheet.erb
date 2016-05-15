@@ -1,0 +1,36 @@
+cheatsheet do
+<%- %w(title docset_file_name keyword introduction style notes).each do |attr_name| -%>
+  <%- next if @resource[attr_name].nil? -%>
+  <%= attr_name %> <<-EOS.strip
+  <%= @resource[attr_name] %>
+  EOS
+<%- end -%>
+
+<%- @resource['categories'].each do |category| -%>
+  category do
+    <%- %w(id html_class).each do |attr_name| -%>
+    <%- next if category[attr_name].nil? -%>
+    <%= attr_name %> <<-EOS.strip
+    <%= category[attr_name] %>
+    EOS
+    <%- end -%>
+
+    <%- category['entries'].each do |entry| -%>
+    entry do
+      <%- %w(name notes).each do |attr_name| -%>
+      <%- next if entry[attr_name].nil? -%>
+      <%= attr_name %> <<-EOS.strip
+      <%= entry[attr_name] %>
+      EOS
+      <%- end -%>
+
+      <%- unless entry['command'].nil? -%>
+      <%- (entry['command'].is_a?(Array) ? entry['command'] : [entry['command']]).each do |command| -%>
+      command '<%= command %>'
+      <%- end -%>
+      <%- end -%>
+    end
+    <%- end -%>
+  end
+<%- end -%>
+end
